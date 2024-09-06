@@ -5,10 +5,34 @@ using UnityEngine.AI;
 
 public class Mover : MonoBehaviour
 {
-    [SerializeField] Transform target;
-    
+    Ray lastRay;
     void Update()
     {
-        GetComponent<NavMeshAgent>().destination = target.position;
+        if (Input.GetMouseButton(0))
+        {
+            MoverToCursor();
+        }
+        else {
+            GetComponent<NavMeshAgent>().velocity = Vector3.zero;
+        }
+
+        UpdateAnimator();
+    }
+
+    private void MoverToCursor() {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        bool hasHit = Physics.Raycast(ray, out hit);
+
+        if (hasHit) { 
+            GetComponent<NavMeshAgent>().destination = hit.point;            
+        }
+    }
+
+    private void UpdateAnimator() { 
+        Vector3 velocity = GetComponent<NavMeshAgent>().velocity;
+        Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+        float speed = localVelocity.z;
+        GetComponent<Animator>().SetFloat("forwardSpeed", speed);
     }
 }
