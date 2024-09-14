@@ -13,62 +13,84 @@ namespace RPG.Combat
         [SerializeField] float timeBetweenAttacks = 1f;
         [SerializeField] float weaponDamage = 20f;
         
-        Transform target;
-        float timeSinceLastAttack = 0;
+        Health target;
+
+        float timeSinceLastAttack = Mathf.Infinity;
         private void Update()
         {
             timeSinceLastAttack += Time.deltaTime;
 
-            if (target != null)
-            {                
-                // If the distance is greater than weaponRange, keep moving towards the target
-                if (GetDistance() > weaponRange)
-                {
-                    GetComponent<Mover>().MoveToDestination(target.position);
-                }
-                else
-                {
-                    // Stop the player when within weapon range
-                    GetComponent<Mover>().Cancel();                    
-                    AttackBehaviour();
-                }
+            if (target == null) return;
+            if (target.IsDead()) return;
+
+            // If the distance is greater than weaponRange, keep moving towards the target
+            if (GetDistance() > weaponRange)
+            {
+                GetComponent<Mover>().MoveToDestination(target.transform.position);
+            }
+            else
+            {
+                // Stop the player when within weapon range
+                GetComponent<Mover>().Cancel();
+                AttackBehaviour();
             }
         }
 
         private void AttackBehaviour()
         {
+            transform.LookAt(target.transform);
+
             if (timeSinceLastAttack >= timeBetweenAttacks)
             {
                 //This will trigger the Hit() event
-                GetComponent<Animator>().SetTrigger("attack");
-                timeSinceLastAttack = 0;                
+                TriggerAttack();
+                timeSinceLastAttack = 0;
             }
+        }
+
+        private void TriggerAttack()
+        {
+            GetComponent<Animator>().ResetTrigger("stopAttack");
+            GetComponent<Animator>().SetTrigger("attack");
         }
 
         //Animation Event
         void Hit()
+        {   
+            if (target == null) return;
+            target.TakeDamage(weaponDamage);            
+        }
+
+        public bool CanAttack(GameObject combatTarget)
         {
-            Health healthComponent = target.GetComponent<Health>();
-            healthComponent.TakeDamage(weaponDamage);
+            if (combatTarget == null) { return false; }                
+            Health targetToTest = combatTarget.GetComponent<Health>();
+            return targetToTest != null && !targetToTest.IsDead();
         }
 
         private float GetDistance()
         {
             // Check the distance between the player and the target
-            return Vector3.Distance(transform.position, target.position);
+            return Vector3.Distance(transform.position, target.transform.position);
         }
 
-        public void Attack(CombatTarget combatTarget) 
+        public void Attack(GameObject combatTarget) 
         {
             GetComponent<ActionScheduler>().StartAction(this);
-            target = combatTarget.transform;
-            print("Take that!");
+            target = combatTarget.GetComponent<Health>();
+            //print("Take that!");
         }
 
-        public void Cancel() { 
+        public void Cancel()
+        {
+            StopAttack();
             target = null;
-            //GetComponent<Animator>().ResetTrigger("attack");
         }
-        
+
+        private void StopAttack()
+        {
+            GetComponent<Animator>().ResetTrigger("attack");
+            GetComponent<Animator>().SetTrigger("stopAttack");
+        }
     }
 }
