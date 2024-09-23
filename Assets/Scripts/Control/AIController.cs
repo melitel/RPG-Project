@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
+using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
 
 namespace RPG.Control
@@ -16,6 +17,8 @@ namespace RPG.Control
         [SerializeField] float waypointDwellingTime = 3f;
         [SerializeField] PatrolPath patrolPath;
         [SerializeField] float waypointTolerance = 1f;
+        [Range(0,1)]
+        [SerializeField] float patrolSpeedFraction = 0.2f;
 
         Fighter fighter;
         Mover mover;
@@ -64,7 +67,7 @@ namespace RPG.Control
         }
 
         private void PatrolBehaviour()
-        {
+        {            
             Vector3 nextPosition = guardPosition;
             
             if (patrolPath != null) 
@@ -79,7 +82,7 @@ namespace RPG.Control
 
             if (timeSinceWaypointReached > waypointDwellingTime) 
             {
-                mover.StartMoveAction(nextPosition);
+                mover.StartMoveAction(nextPosition, patrolSpeedFraction);
             }
         }
 
@@ -100,12 +103,12 @@ namespace RPG.Control
         }
 
         private void SuspicionBehaviour()
-        {
+        {            
             GetComponent<ActionScheduler>().CancelCurrentAction();
         }
 
         private void AttackBehaviour()
-        {
+        {            
             timeSinceLastSawPlayer = 0;
             fighter.Attack(player);
         }
