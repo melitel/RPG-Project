@@ -1,15 +1,17 @@
+using Newtonsoft.Json.Linq;
 using RPG.Combat;
 using RPG.Core;
+using RPG.Saving;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 namespace RPG.Movement
 {
-    public class Mover : MonoBehaviour, IAction
+    public class Mover : MonoBehaviour, IAction, IJsonSaveable
     {
-        [SerializeField] Transform target;
         [SerializeField] float maxSpeed = 5f;
         
         NavMeshAgent navMeshAgent;
@@ -50,6 +52,24 @@ namespace RPG.Movement
             Vector3 localVelocity = transform.InverseTransformDirection(velocity);
             float speed = localVelocity.z;
             GetComponent<Animator>().SetFloat("forwardSpeed", speed);
+        }
+
+        public JToken CaptureAsJToken()
+        {
+            return transform.position.ToToken();
+        }
+
+        public void RestoreFromJToken(JToken state)
+        {
+            if (navMeshAgent == null)
+            {
+                navMeshAgent = GetComponent<NavMeshAgent>();
+            }
+
+            navMeshAgent.enabled = false;
+            transform.position = state.ToVector3();
+            navMeshAgent.enabled = true;
+            GetComponent<ActionScheduler>().CancelCurrentAction();
         }
     }
 }

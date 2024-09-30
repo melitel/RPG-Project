@@ -15,27 +15,32 @@ namespace RPG.SceneManagement
         [SerializeField] int firstLevelBuildIndex = 1;
         [SerializeField] int menuLevelBuildIndex = 0;
 
-        public void ContinueGame()
+        IEnumerator Start()
         {
-            StartCoroutine(LoadLastScene());
+            yield return LoadLastScene();
         }
 
-        public void NewGame(string saveFile)
-        {
-            SetCurrentSave(saveFile);
-            StartCoroutine(LoadFirstScene());
-        }
+        //public void ContinueGame()
+        //{
+        //    StartCoroutine(LoadLastScene());
+        //}
 
-        public void LoadGame(string saveFile)
-        {
-            SetCurrentSave(saveFile);
-            ContinueGame();
-        }
+        //public void NewGame(string saveFile)
+        //{
+        //    SetCurrentSave(saveFile);
+        //    StartCoroutine(LoadFirstScene());
+        //}
 
-        public void LoadMenu()
-        {
-            StartCoroutine(LoadMenuScene());
-        }
+        //public void LoadGame(string saveFile)
+        //{
+        //    SetCurrentSave(saveFile);
+        //    ContinueGame();
+        //}
+
+        //public void LoadMenu()
+        //{
+        //    StartCoroutine(LoadMenuScene());
+        //}
 
         private void SetCurrentSave(string saveFile)
         {

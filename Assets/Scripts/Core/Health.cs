@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using RPG.Utils;
 
 namespace RPG.Core {
 
@@ -14,6 +13,7 @@ namespace RPG.Core {
 
         bool isDead = false;
 
+        bool wasDeadLastFrame = false;
 
         public bool IsDead() 
         { 
@@ -22,7 +22,6 @@ namespace RPG.Core {
         public void TakeDamage(float damage)
         {
             healthPoints = Mathf.Max(healthPoints - damage, 0);
-            //print(healthPoints);
             Die();
         }
 
@@ -38,19 +37,33 @@ namespace RPG.Core {
 
         public JToken CaptureAsJToken()
         {
+            print(healthPoints);
             return JToken.FromObject(healthPoints);
         }
 
         public void RestoreFromJToken(JToken state)
         {
             healthPoints = state.ToObject<float>();
+            print(healthPoints);
+
             UpdateState();
         }
 
         private void UpdateState()
         {
-            
-        }
+            Animator animator = GetComponent<Animator>();
+            if (!wasDeadLastFrame && IsDead())
+            {
+                animator.SetTrigger("die");
+                GetComponent<ActionScheduler>().CancelCurrentAction();
+            }
 
+            if (wasDeadLastFrame && !IsDead())
+            {
+                animator.Rebind();
+            }
+
+            wasDeadLastFrame = IsDead();
+        }
     }
 }
