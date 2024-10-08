@@ -13,7 +13,7 @@ namespace RPG.Core {
 
         bool isDead = false;
 
-        bool wasDeadLastFrame = false;
+        //bool wasDeadLastFrame = false;
 
         public bool IsDead() 
         { 
@@ -22,17 +22,26 @@ namespace RPG.Core {
         public void TakeDamage(float damage)
         {
             healthPoints = Mathf.Max(healthPoints - damage, 0);
-            Die();
+            if (healthPoints <= 0) 
+            {
+                Die();
+            }
         }
 
         private void Die()
         {
-            if (healthPoints == 0 && !isDead)
-            {
-                isDead = true;
-                GetComponent<Animator>().SetTrigger("die");
-                GetComponent<ActionScheduler>().CancelCurrentAction();
-            }
+            if(isDead) return;
+
+            isDead = true;
+            GetComponent<Animator>().SetTrigger("die");
+            GetComponent<ActionScheduler>().CancelCurrentAction();
+
+            //if (healthPoints == 0 && !isDead)
+            //{
+            //    isDead = true;
+            //    GetComponent<Animator>().SetTrigger("die");
+            //    GetComponent<ActionScheduler>().CancelCurrentAction();
+            //}
         }
 
         public JToken CaptureAsJToken()
@@ -51,19 +60,23 @@ namespace RPG.Core {
 
         private void UpdateState()
         {
-            Animator animator = GetComponent<Animator>();
-            if (!wasDeadLastFrame && IsDead())
-            {
-                animator.SetTrigger("die");
-                GetComponent<ActionScheduler>().CancelCurrentAction();
+            if (healthPoints <= 0) 
+            { 
+                Die();
             }
 
-            if (wasDeadLastFrame && !IsDead())
-            {
-                animator.Rebind();
-            }
+            //Animator animator = GetComponent<Animator>();
+            //if (!wasDeadLastFrame && IsDead())
+            //{
+            //    Die();
+            //}
 
-            wasDeadLastFrame = IsDead();
+            //if (wasDeadLastFrame && !IsDead())
+            //{
+            //    animator.Rebind();
+            //}
+
+            //wasDeadLastFrame = IsDead();
         }
     }
 }

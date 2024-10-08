@@ -55,7 +55,7 @@ namespace RPG.SceneManagement
         private IEnumerator LoadLastScene()
         {
             Fader fader = FindObjectOfType<Fader>();
-            yield return fader.FadeOut(fadeOutTime);
+            fader.FadeOutImmediate();
             yield return GetComponent<JsonSavingSystem>().LoadLastScene(GetCurrentSave());
             yield return fader.FadeIn(fadeInTime);
         }

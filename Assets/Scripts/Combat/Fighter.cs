@@ -8,14 +8,21 @@ using static UnityEngine.GraphicsBuffer;
 namespace RPG.Combat 
 {
     public class Fighter : MonoBehaviour, IAction
-    {
-        [SerializeField] float weaponRange = 2f;
+    {        
         [SerializeField] float timeBetweenAttacks = 1f;
-        [SerializeField] float weaponDamage = 20f;
+        [SerializeField] Transform handTransform = null;   
+        [SerializeField] Weapon defaultWeapon = null;
         
         Health target;
 
         float timeSinceLastAttack = Mathf.Infinity;
+
+        Weapon currentWeapon = null;
+
+        private void Start()
+        {
+            EquipWeapon(defaultWeapon);
+        }
         private void Update()
         {
             timeSinceLastAttack += Time.deltaTime;
@@ -24,7 +31,7 @@ namespace RPG.Combat
             if (target.IsDead()) return;
 
             // If the distance is greater than weaponRange, keep moving towards the target
-            if (GetDistance() > weaponRange)
+            if (GetDistance() > currentWeapon.GetRange())
             {
                 GetComponent<Mover>().MoveToDestination(target.transform.position, 1f);
             }
@@ -33,6 +40,16 @@ namespace RPG.Combat
                 // Stop the player when within weapon range
                 GetComponent<Mover>().Cancel();
                 AttackBehaviour();
+            }
+        }
+
+        public void EquipWeapon(Weapon weapon) 
+        {
+            currentWeapon = weapon;
+            if (currentWeapon != null)
+            {
+                Animator animator = GetComponent<Animator>();
+                currentWeapon.Spawn(handTransform, animator);            
             }
         }
 
@@ -58,7 +75,7 @@ namespace RPG.Combat
         void Hit()
         {   
             if (target == null) return;
-            target.TakeDamage(weaponDamage);            
+            target.TakeDamage(currentWeapon.GetDamage());            
         }
 
         public bool CanAttack(GameObject combatTarget)
