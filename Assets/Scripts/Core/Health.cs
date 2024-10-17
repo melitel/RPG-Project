@@ -64,19 +64,6 @@ namespace RPG.Core {
             { 
                 Die();
             }
-
-            //Animator animator = GetComponent<Animator>();
-            //if (!wasDeadLastFrame && IsDead())
-            //{
-            //    Die();
-            //}
-
-            //if (wasDeadLastFrame && !IsDead())
-            //{
-            //    animator.Rebind();
-            //}
-
-            //wasDeadLastFrame = IsDead();
         }
     }
 }

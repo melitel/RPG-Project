@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2389692069780712709, guid: 23ba1e09ee395064782b5138e109c93e, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3115668041797055481, guid: 23ba1e09ee395064782b5138e109c93e, type: 3}
       propertyPath: weapon
       value: 
@@ -32,6 +36,14 @@ PrefabInstance:
       propertyPath: weaponOverride
       value: 
       objectReference: {fileID: 22100000, guid: 1f43678f03748ab4e849aec38e8cd6ba, type: 2}
+    - target: {fileID: 3115668041797055481, guid: 23ba1e09ee395064782b5138e109c93e, type: 3}
+      propertyPath: leftHandTransform
+      value: 
+      objectReference: {fileID: 5795358256530354972}
+    - target: {fileID: 3115668041797055481, guid: 23ba1e09ee395064782b5138e109c93e, type: 3}
+      propertyPath: rightHandTransform
+      value: 
+      objectReference: {fileID: 5795358256530412318}
     - target: {fileID: 4071303189992842790, guid: 23ba1e09ee395064782b5138e109c93e, type: 3}
       propertyPath: m_Name
       value: Enemy
@@ -134,10 +146,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.41461128
-  m_Height: 2.8724117
+  m_Radius: 0.29149777
+  m_Height: 2.0015805
   m_Direction: 1
-  m_Center: {x: -0.014936924, y: 0.43620586, z: 0.070451796}
+  m_Center: {x: -0.009968881, y: 1, z: 0.070451766}
 --- !u!114 &6919255300412788022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +230,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30cf93deff988e74e88a144bd2127c18, type: 3}
+--- !u!4 &5795358256530354972 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 481036, guid: 30cf93deff988e74e88a144bd2127c18, type: 3}
+  m_PrefabInstance: {fileID: 5795358256530007056}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5795358256530412318 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 423694, guid: 30cf93deff988e74e88a144bd2127c18, type: 3}

@@ -61,6 +61,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 679ff741e12a7e740819ede24a7000b7, type: 3}
+--- !u!4 &758309340109094773 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 403948, guid: 679ff741e12a7e740819ede24a7000b7, type: 3}
+  m_PrefabInstance: {fileID: 758309340109477529}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &758309340109124483 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 435482, guid: 679ff741e12a7e740819ede24a7000b7, type: 3}
@@ -111,6 +116,14 @@ PrefabInstance:
       propertyPath: weaponOverride
       value: 
       objectReference: {fileID: 22100000, guid: 1f43678f03748ab4e849aec38e8cd6ba, type: 2}
+    - target: {fileID: 3115668041797055481, guid: 23ba1e09ee395064782b5138e109c93e, type: 3}
+      propertyPath: leftHandTransform
+      value: 
+      objectReference: {fileID: 758309340109094773}
+    - target: {fileID: 3115668041797055481, guid: 23ba1e09ee395064782b5138e109c93e, type: 3}
+      propertyPath: rightHandTransform
+      value: 
+      objectReference: {fileID: 758309340109152029}
     - target: {fileID: 4071303189992842790, guid: 23ba1e09ee395064782b5138e109c93e, type: 3}
       propertyPath: m_Name
       value: Player
@@ -218,9 +231,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.35
-  m_Height: 1.93
+  m_Height: 1.906081
   m_Direction: 1
-  m_Center: {x: 0, y: 0.91, z: 0}
+  m_Center: {x: 0, y: 0.9210671, z: 0}
 --- !u!4 &6951813315292514213 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8554358040934553984, guid: 23ba1e09ee395064782b5138e109c93e, type: 3}

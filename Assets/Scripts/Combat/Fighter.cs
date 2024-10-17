@@ -1,5 +1,7 @@
+using Newtonsoft.Json.Linq;
 using RPG.Core;
 using RPG.Movement;
+using RPG.Saving;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,12 +9,13 @@ using static UnityEngine.GraphicsBuffer;
 
 namespace RPG.Combat 
 {
-    public class Fighter : MonoBehaviour, IAction
+    public class Fighter : MonoBehaviour, IAction, IJsonSaveable
     {        
         [SerializeField] float timeBetweenAttacks = 1f;
-        [SerializeField] Transform handTransform = null;   
+        [SerializeField] Transform rightHandTransform = null;
+        [SerializeField] Transform leftHandTransform = null;
         [SerializeField] Weapon defaultWeapon = null;
-        
+
         Health target;
 
         float timeSinceLastAttack = Mathf.Infinity;
@@ -21,7 +24,10 @@ namespace RPG.Combat
 
         private void Start()
         {
-            EquipWeapon(defaultWeapon);
+            if (currentWeapon == null) 
+            {
+                EquipWeapon(defaultWeapon);
+            }
         }
         private void Update()
         {
@@ -49,7 +55,7 @@ namespace RPG.Combat
             if (currentWeapon != null)
             {
                 Animator animator = GetComponent<Animator>();
-                currentWeapon.Spawn(handTransform, animator);            
+                currentWeapon.Spawn(rightHandTransform, leftHandTransform, animator);
             }
         }
 
@@ -75,7 +81,19 @@ namespace RPG.Combat
         void Hit()
         {   
             if (target == null) return;
-            target.TakeDamage(currentWeapon.GetDamage());            
+            if (currentWeapon.HasProjectile())
+            {
+                currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target);                
+            }
+            else 
+            { 
+                target.TakeDamage(currentWeapon.GetDamage());
+            }
+        }
+
+        void Shoot()
+        {
+            Hit();
         }
 
         public bool CanAttack(GameObject combatTarget)
@@ -109,6 +127,17 @@ namespace RPG.Combat
         {
             GetComponent<Animator>().ResetTrigger("attack");
             GetComponent<Animator>().SetTrigger("stopAttack");
+        }
+
+        public JToken CaptureAsJToken()
+        {
+            return JToken.FromObject(currentWeapon.name);
+        }
+
+        public void RestoreFromJToken(JToken state)
+        {            
+            Weapon weapon = Resources.Load<Weapon>(state.ToObject<string>());
+            EquipWeapon(weapon);
         }
     }
 }
