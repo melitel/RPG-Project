@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 5728633191697352714, guid: 23ba1e09ee395064782b5138e109c93e, type: 3}
+      propertyPath: characterClass
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7543298647116016575, guid: 23ba1e09ee395064782b5138e109c93e, type: 3}
       propertyPath: m_Speed
       value: 4
