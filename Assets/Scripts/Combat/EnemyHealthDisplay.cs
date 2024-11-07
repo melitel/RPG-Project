@@ -28,7 +28,7 @@ namespace RPG.Combat
                 return;
             }
 
-            enemyHealthText.text = "Enemy: " + targetHealth.GetPercentage().ToString() + "%";
+            enemyHealthText.text = "Enemy: " + targetHealth.GetHealthPoints() + "/" + targetHealth.GetMaxHealthPoints();
         }
     }
 }

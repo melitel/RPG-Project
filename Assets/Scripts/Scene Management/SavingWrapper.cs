@@ -15,10 +15,15 @@ namespace RPG.SceneManagement
         [SerializeField] int firstLevelBuildIndex = 1;
         [SerializeField] int menuLevelBuildIndex = 0;
 
-        IEnumerator Start()
+        private void Awake()
         {
-            yield return LoadLastScene();
+            StartCoroutine(LoadLastScene());
         }
+
+        //IEnumerator Start()
+        //{
+        //    yield return LoadLastScene();
+        //}
 
         //public void ContinueGame()
         //{
@@ -54,9 +59,9 @@ namespace RPG.SceneManagement
 
         private IEnumerator LoadLastScene()
         {
+            yield return GetComponent<JsonSavingSystem>().LoadLastScene(GetCurrentSave());
             Fader fader = FindObjectOfType<Fader>();
             fader.FadeOutImmediate();
-            yield return GetComponent<JsonSavingSystem>().LoadLastScene(GetCurrentSave());
             yield return fader.FadeIn(fadeInTime);
         }
 

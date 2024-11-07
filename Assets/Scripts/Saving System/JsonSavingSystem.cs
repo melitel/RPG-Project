@@ -126,7 +126,6 @@ namespace RPG.Saving
             }
         }
 
-
         private string GetPathFromSaveFile(string saveFile)
         {
             return Path.Combine(Application.persistentDataPath, saveFile + extension);

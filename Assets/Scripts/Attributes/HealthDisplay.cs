@@ -21,7 +21,8 @@ namespace RPG.Attributes
             if (health != null && healthText != null)
             {
                 // Update the text with the player's health percentage
-                healthText.text = "Health: " + health.GetPercentage().ToString() + "%";
+                //healthText.text = "Health: " + health.GetPercentage().ToString() + "%";
+                healthText.text = "Health: " + health.GetHealthPoints() + "/" + health.GetMaxHealthPoints();
             }
         }
     }

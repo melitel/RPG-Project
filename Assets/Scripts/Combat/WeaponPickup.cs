@@ -11,11 +11,11 @@ namespace RPG.Combat
         [SerializeField] float respawnTime = 5f;
         Collider pickupCollider;
 
-        private void Start()
+        private void Awake()
         {
-            // Cache the collider
             pickupCollider = GetComponent<Collider>();
         }
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.tag == "Player") 
