@@ -28,7 +28,7 @@ namespace RPG.Combat
                 return;
             }
 
-            enemyHealthText.text = "Enemy: " + targetHealth.GetHealthPoints() + "/" + targetHealth.GetMaxHealthPoints();
+            enemyHealthText.text = $"Enemy: {targetHealth.GetHealthPoints():0}/{targetHealth.GetMaxHealthPoints():0}";
         }
     }
 }

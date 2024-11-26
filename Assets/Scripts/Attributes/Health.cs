@@ -5,15 +5,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using RPG.Stats;
-using System.Numerics;
 using System;
+using System.Numerics;
 using GameDevTV.Utils;
+using RPG.Stats;
 
 namespace RPG.Attributes {
 
     public class Health : MonoBehaviour, IJsonSaveable
     {
+        [SerializeField] UnityEvent<float> takeDamage;
+        [SerializeField] UnityEvent onDie;
+
         BaseStats baseStats;
         LazyValue<float> healthPoints;        
         bool isDead = false;
@@ -30,7 +33,7 @@ namespace RPG.Attributes {
         }
         private void Start()
         {
-            healthPoints.ForceInit();
+            healthPoints.ForceInit();            
         }
 
         private void OnEnable()
@@ -52,10 +55,16 @@ namespace RPG.Attributes {
             print(gameObject.name + "took damage: " + damage);
 
             healthPoints.value = Mathf.Max(healthPoints.value - damage, 0);
+
             if (healthPoints.value <= 0)
             {
+                onDie.Invoke();
                 Die();
                 AwardExperience(instigator);
+            }
+            else 
+            {
+                takeDamage.Invoke(damage);
             }
         }
 
@@ -107,16 +116,13 @@ namespace RPG.Attributes {
         }
 
         public JToken CaptureAsJToken()
-        {
-            //print(healthPoints);
-            return JToken.FromObject(healthPoints);
+        {            
+            return JToken.FromObject(healthPoints.value);
         }
 
         public void RestoreFromJToken(JToken state)
         {
             healthPoints.value = state.ToObject<float>();
-            //print(healthPoints);
-
             UpdateState();
         }
 

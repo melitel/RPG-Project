@@ -22,7 +22,7 @@ namespace RPG.Attributes
             {
                 // Update the text with the player's health percentage
                 //healthText.text = "Health: " + health.GetPercentage().ToString() + "%";
-                healthText.text = "Health: " + health.GetHealthPoints() + "/" + health.GetMaxHealthPoints();
+                healthText.text = $"Health: {health.GetHealthPoints():0}/{health.GetMaxHealthPoints():0}";
             }
         }
     }
