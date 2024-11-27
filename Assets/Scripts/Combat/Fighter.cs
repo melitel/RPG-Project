@@ -50,7 +50,7 @@ namespace RPG.Combat
             if (target.IsDead()) return;
 
             // If the distance is greater than weaponRange, keep moving towards the target
-            if (GetDistance() > currentWeaponConfig.GetRange())
+            if (GetIsInRange(target.transform))
             {
                 GetComponent<Mover>().MoveToDestination(target.transform.position, 1f);
             }
@@ -65,11 +65,7 @@ namespace RPG.Combat
         public void EquipWeapon(WeaponConfig weapon) 
         {
             currentWeaponConfig = weapon;
-            currentWeapon.value = AttachWeapon(weapon);
-            if (currentWeaponConfig != null)
-            {
-                AttachWeapon(weapon);
-            }
+            currentWeapon.value = AttachWeapon(weapon);            
         }
 
         private Weapon AttachWeapon(WeaponConfig weapon)
@@ -107,6 +103,11 @@ namespace RPG.Combat
             if (target == null) return;
             float damage = GetComponent<BaseStats>().GetStat(Stat.Damage);
 
+            if (currentWeapon.value != null)
+            {
+                currentWeapon.value.OnHit();
+            }
+
             if (currentWeaponConfig.HasProjectile())
             {
                 currentWeaponConfig.LaunchProjectile(rightHandTransform, leftHandTransform, target, gameObject, damage);                
@@ -122,17 +123,21 @@ namespace RPG.Combat
             Hit();
         }
 
-        public bool CanAttack(GameObject combatTarget)
+        private bool GetIsInRange(Transform targetTransform)
         {
-            if (combatTarget == null) { return false; }                
-            Health targetToTest = combatTarget.GetComponent<Health>();
-            return targetToTest != null && !targetToTest.IsDead();
+            return Vector3.Distance(transform.position, targetTransform.position) < currentWeaponConfig.GetRange();
         }
 
-        private float GetDistance()
+        public bool CanAttack(GameObject combatTarget)
         {
-            // Check the distance between the player and the target
-            return Vector3.Distance(transform.position, target.transform.position);
+            if (combatTarget == null) { return false; }
+            if (!GetComponent<Mover>().CanMoveTo(combatTarget.transform.position) && 
+                !GetIsInRange(combatTarget.transform))
+            { 
+                return false; 
+            }
+            Health targetToTest = combatTarget.GetComponent<Health>();
+            return targetToTest != null && !targetToTest.IsDead();
         }
 
         public void Attack(GameObject combatTarget) 

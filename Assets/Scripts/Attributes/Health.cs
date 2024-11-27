@@ -52,7 +52,7 @@ namespace RPG.Attributes {
         }
         public void TakeDamage(GameObject instigator, float damage)
         {
-            print(gameObject.name + "took damage: " + damage);
+            //print(gameObject.name + "took damage: " + damage);
 
             healthPoints.value = Mathf.Max(healthPoints.value - damage, 0);
 
@@ -114,7 +114,10 @@ namespace RPG.Attributes {
         {
             healthPoints.value = baseStats.GetStat(Stat.Health);
         }
-
+        public void Heal(float healValue)
+        {
+            healthPoints.value = Mathf.Min(healthPoints.value + healValue, GetMaxHealthPoints());
+        }
         public JToken CaptureAsJToken()
         {            
             return JToken.FromObject(healthPoints.value);
@@ -132,6 +135,6 @@ namespace RPG.Attributes {
             { 
                 Die();
             }
-        }
+        }        
     }
 }
